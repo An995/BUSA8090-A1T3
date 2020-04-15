@@ -1,0 +1,44 @@
+1a)
+
+Code: curl https://www.staff.hs-mittweida.de/~wuenschi/data/media/compbiolbook/expression.tab>> expression.tab
+$ cat expression.tab
+
+
+1b)
+
+Code: curl Code: curl https://www.staff.hs-mittweida.de/~wuenschi/data/media/compbiolbook/annotation.tab >> annotation.tab
+$ cat annotation.tab
+
+
+1c)
+
+ code: $join -j 1 -o 1.1,2.2,1.2 <(sort -k1 expression.tab) <(sort -k1 annotation.tab) | column  -t 
+ 
+ 
+1d)
+ 
+ code: mysql -u awkologist -p compbiol -e"select a.gene,a.metabolism from annotation a,annotation b where a.metabolism=b.metabolism and a.gene<>b.gene;"
+ 
+ 
+2a)
+ 
+ code: mysql -u awkologist -p compbiol -e"select lastname,firstname from Member where coach is NULL"
+ 
+ 
+2b)
+ 
+ code: mysql -u awkologist -p compbiol -e 'select LastName, FirstName,JoinDate from Member WHERE JoinDate BETWEEN "2010-01-01 00:00:00" AND "2010-12-31 00:00:00" ORDER BY JoinDate;'
+ 
+ 
+2c)
+ 
+ code: mysql -u awkologist -p compbiol -e 'SELECT m.MemberID, m.LastName, m.FirstName FROM Member m where exists (select * from Entry e where m.MemberID=e.MemberID and e.Year<>2014);'
+
+
+2d)
+
+ code:mysql -u awkologist -p compbiol -e 'SELECT m.MemberID, m.LastName, m.FirstName FROM Member m WHERE m.MemberID IN (SELECT e.MemberID from Entry e Group By e.MemberID Having COUNT(DISTINCT Year) = (SELECT COUNT(DISTINCT Year) from Entry));'
+ 
+ 
+
+ 
